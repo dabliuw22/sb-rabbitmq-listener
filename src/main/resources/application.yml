@@ -1,0 +1,21 @@
+server:
+  port: 8081
+
+spring:
+  application:
+    name: rabbitmq-listener
+
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+
+rabbitmq:
+  queue:
+    name: myQueue
+    durable: true
+  exchange:
+    name: myExchange
+    durable: true
+  routing-key: myRoutingKey.#
