@@ -73,6 +73,7 @@ public class RabbitMqConfiguration {
 
     @Bean
     public Binding binding(Exchange exchange, Queue queue) {
+        // La queue esta interesada en los mensajes del exchange con toutingKey
         return BindingBuilder.bind(queue).to(exchange).with(routingKey).noargs();
     }
 
