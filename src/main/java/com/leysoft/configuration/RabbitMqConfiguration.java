@@ -1,6 +1,7 @@
 
 package com.leysoft.configuration;
 
+import org.springframework.amqp.core.AmqpAdmin;
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
 import org.springframework.amqp.core.Exchange;
@@ -11,6 +12,7 @@ import org.springframework.amqp.rabbit.annotation.EnableRabbit;
 import org.springframework.amqp.rabbit.config.SimpleRabbitListenerContainerFactory;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
+import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.amqp.support.converter.MessageConverter;
 import org.springframework.beans.factory.annotation.Value;
@@ -85,6 +87,16 @@ public class RabbitMqConfiguration {
     @Bean
     public MessageConverter messageConverter() {
         return new Jackson2JsonMessageConverter();
+    }
+
+    @Bean
+    public AmqpAdmin rabbitAdmin(ConnectionFactory connectionFactory, Exchange exchange,
+            Binding binding, Queue queue) {
+        RabbitAdmin rabbitAdmin = new RabbitAdmin(connectionFactory);
+        rabbitAdmin.declareExchange(exchange);
+        rabbitAdmin.declareQueue(queue);
+        rabbitAdmin.declareBinding(binding);
+        return rabbitAdmin;
     }
 
     @Bean(
