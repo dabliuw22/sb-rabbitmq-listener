@@ -13,9 +13,7 @@ spring:
 
 rabbitmq:
   queue:
-    name: myQueue
-    durable: true
+    name: myFanoutQueue
   exchange:
-    name: myExchange
+    name: myFanoutExchange
     durable: true
-  routing-key: myRoutingKey.#

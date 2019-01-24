@@ -5,7 +5,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -17,10 +16,6 @@ import com.leysoft.service.inter.ReceiverService;
 public class ReceiverServiceImp implements ReceiverService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ReceiverServiceImp.class);
-
-    @Value(
-            value = "${rabbitmq.routing-key}")
-    private String routingKey;
 
     @Autowired
     private ObjectMapper objectMapper;

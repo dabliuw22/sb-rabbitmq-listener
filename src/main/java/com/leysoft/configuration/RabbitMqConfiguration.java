@@ -6,6 +6,7 @@ import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
 import org.springframework.amqp.core.Exchange;
 import org.springframework.amqp.core.ExchangeBuilder;
+import org.springframework.amqp.core.FanoutExchange;
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.core.QueueBuilder;
 import org.springframework.amqp.rabbit.annotation.EnableRabbit;
@@ -44,20 +45,12 @@ public class RabbitMqConfiguration {
     private String queueName;
 
     @Value(
-            value = "${rabbitmq.queue.durable:true}")
-    private boolean queueDurable;
-
-    @Value(
             value = "${rabbitmq.exchange.name}")
     private String exchangeName;
 
     @Value(
             value = "${rabbitmq.exchange.durable:true}")
     private boolean exchangeDurable;
-
-    @Value(
-            value = "${rabbitmq.routing-key}")
-    private String routingKey;
 
     @Bean
     public ConnectionFactory connectionFactory() {
@@ -69,14 +62,16 @@ public class RabbitMqConfiguration {
     }
 
     @Bean
-    public Exchange exchange() {
-        return ExchangeBuilder.topicExchange(exchangeName).durable(true).build();
+    public FanoutExchange exchange() {
+        FanoutExchange exchange = (FanoutExchange) ExchangeBuilder.fanoutExchange(exchangeName)
+                .durable(exchangeDurable).build();
+        return exchange;
     }
 
     @Bean
-    public Binding binding(Exchange exchange, Queue queue) {
-        // La queue esta interesada en los mensajes del exchange con toutingKey
-        return BindingBuilder.bind(queue).to(exchange).with(routingKey).noargs();
+    public Binding binding(FanoutExchange exchange, Queue queue) {
+        // La queue esta interesada en los mensajes del exchange
+        return BindingBuilder.bind(queue).to(exchange);
     }
 
     @Bean
