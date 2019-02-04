@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -20,6 +21,7 @@ public class ReceiverServiceImp implements ReceiverService {
     @Autowired
     private ObjectMapper objectMapper;
 
+    @Transactional
     @RabbitListener(
             queues = {
                 "${rabbitmq.queue.name}"
